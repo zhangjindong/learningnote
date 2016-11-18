@@ -4,7 +4,6 @@ grunt的各种插件
 ==========
 
 ## [grunt-wiredep](https://www.npmjs.com/package/grunt-wiredep)
-----------------------------------------------------------------
 
 ####What is this?
 
@@ -49,9 +48,8 @@ grunt的各种插件
            <script src="/bower_components/seajs/dist/sea.js"></script>   
         <!-- endbower -->
 
-
-## [grunt-contrib-watch](https://www.npmjs.com/package/grunt-contrib-watch)
 ----------------------------------------------------------------
+## [grunt-contrib-watch](https://www.npmjs.com/package/grunt-contrib-watch)
 
 ####What is this?
 
