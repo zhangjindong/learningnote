@@ -255,4 +255,4 @@ grunt的各种插件
 ## [grunt-contrib-requirejs](https://www.npmjs.com/package/grunt-contrib-requirejs)
 
 ####What is this?
-> ：
+> 用户requirejs的合并工作
