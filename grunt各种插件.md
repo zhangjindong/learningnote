@@ -256,3 +256,83 @@ grunt的各种插件
 
 ####What is this?
 > 用户requirejs的合并工作
+
+----------------------------------------------------------------
+## [grunt-contrib-connect](https://www.npmjs.com/package/grunt-contrib-connect)
+
+####What is this?
+> 用来充当一个静态文件服务器，本身集成了 livereload 功能 ，grunt-contrib-watch , 监视文件的改变，然后执行指定任务，这里用来刷新  grunt serve 打开的页面
+> load-grunt-tasks , 省事的插件，有了这个可以不用写一堆的 grunt.loadNpmTasks('xxx') ，再多的任务只需要写一个 require('load-grunt-tasks')(grunt) 。
+> 参考的文档中提到了 time-grunt 插件，可用来显示每一个任务所花的时间和百分比，由于此示例中基本就 watch 任务占了百分百的时间。
+> require('time-grunt')(grunt); 如果要使用 time-grunt 插件
+
+####实例
+
+  module.exports = function(grunt) {
+
+    require('load-grunt-tasks')(grunt); //加载所有的任务
+    //require('time-grunt')(grunt); 如果要使用 time-grunt 插件
+
+    grunt.initConfig({
+      connect: {
+        options: {
+          port: 9000,
+          hostname: '*', //默认就是这个值，可配置为本机某个 IP，localhost 或域名
+          livereload: 35729 //声明给 watch 监听的端口
+        },
+
+        server: {
+          options: {
+            open: true, //自动打开网页 http://
+            base: [
+              'app' //主目录
+            ]
+          }
+        }
+      },
+
+      watch: {
+        livereload: {
+          options: {
+            livereload: '<%=connect.options.livereload%>' //监听前面声明的端口  35729
+          },
+
+          files: [ //下面文件的改变就会实时刷新网页
+            'app/*.html',
+            'app/style/{,*/}*.css',
+            'app/scripts/{,*/}*.js',
+            'app/images/{,*/}*.{png,jpg}'
+          ]
+        }
+      }
+    });
+
+    grunt.registerTask('serve', [
+      'connect:server',
+      'watch'
+    ]);
+  }
+现在我们配置好了一个静态文件 Web 服务器，运行命令
+
+grunt serve
+
+会自动打开浏览器访问 http://0.0.0.0:9000, 然后有个 watch 一直在监听文件的改变。如果 app 目录下有 index.html 则浏览该文件，没有索引文件就显示文件目录列表。
+
+本文原始链接 http://unmi.cc/grunt-contrib-connect-build-livereload-dev-env/ , 
+
+这时候在 app 目录中增，删相关类型的文件都会实时反映在上面的 http://0.0.0.0:9000 页面上，也就是文件列表可以实时刷新。
+
+现在我们想要更极致的实时页面内容的预览，我们打开上面的某个页面，如 http://0.0.0.0:9000/test.html，然而我们来编辑 test.html 文件内容，来观察页面是不是能实时预览。
+
+你也应该不能在页面上看到实时的修改，为能实时预览我们还要做点事情，看这里 https://github.com/gruntjs/grunt-contrib-watch#live-reloading 有两种办法：
+
+1. 在需要实时预览的页面里加上
+
+<script src="http://localhost:35729/livereload.js"></script>
+注意相应的主机和端口号
+
+2. 安装浏览器扩展，包括 Safari, Chrome 和 Firefox 的，点击链接   How do I install and use the browser extensions? 安装。这样就不用在页面上引入上面的脚本。
+
+现在看实时的预览效果
+
+grunt-connect 还可以和 grunt-connect-proxy 结合来制作本地代理访问其他域名的 api 而不用处理跨域问题，有空再体验下 grunt-connect-proxy。
